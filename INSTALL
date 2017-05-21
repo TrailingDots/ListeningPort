@@ -1,0 +1,16 @@
+Installation of listeningPort.py is very simple.
+
+Some developers will likely need to install psutils:
+    
+    pip install psutils
+
+Perhaps you will need to prefix the above pip command with "sudo"
+for proper operation.
+
+Read and play with the operating instructions at listeningPort.html .
+
+The copy listeningPort.py to somewhere in your $PATH. A common place 
+would be $HOME/bin . 
+
+Rename listeningPort.py to something like listening or listeningPort.
+
