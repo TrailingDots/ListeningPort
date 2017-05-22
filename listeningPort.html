@@ -14,23 +14,24 @@
 
 
         <p>Developing software using sockets almost always involves
-        starting, stopping, debugging multiple processes opening
+        starting, stopping, debugging multiple processes, opening
         and closing sockets. The processes may or may not work
         properly as differing stages of development creates
         "interesting" problems. To complicate matters, multiple systems
-        add to this effort.</p>
+        frequently add to this effort.</p>
 
-        <p>Frequently this development process encounters sockets
-        left open after crashes, process not yet properly closing
+        <p>This development process often encounters sockets
+        left open after crashes, processes not properly closing
         or terminating, etc. The end result has processes running
-        with unwanted sockets.</p>
+        with unwanted sockets. When debugging resumes, developers
+        encounter the "Address already in use" problem.</p>
 
         <h1><code>listeningPort.py</code> - A tool to map port names to process pid</h1>
 
         <p><code>listeningPort.py</code> performs a mapping of a
-        port number to a process id, a pid. Furthermore, the
+        port number to a process id, i.e., a pid. Furthermore, the
         interface allows a range of ports as input. The output
-        may take several hopefully useful forms.</p>
+        can take several hopefully useful forms.</p>
 
         <p>Additionally, since <code>listeningPort.py</code> maps
         ports to pids, it has the capability to kill a process
@@ -39,15 +40,18 @@
 
         <h1>A brief demo of the problem</h1>
 
-        <p>The demo web server, <code>demoSocket.py</code>, binds
-        to a user selected port and does little else. Its purpose
-        is to open a port and keep it open. <code>demoSocket.py</code>
+        <p>The demo server, <code>demoSocket.py</code>, binds
+        to a user selected port and does little else. Its behavior
+        opens a port and keeps it open. <code>demoSocket.py</code>
         doesn't do much. It only listens to a socket. It serves
         its purpose by continuing to listen to a port. Its purpose
         is to illustrate the utility <code>listeningPort.py</code>
         and nothing else.</p>
 
-        <p>To illustrate the problem, open two console windows
+        <p>The following examples use ports 5570 through 5580. Port
+        5570 is the default port used by <a href="http://www.zeromq.org">ZeroMQ</a>.</p>
+
+        <p>To illustrate the "Address in use" problem, open two console windows
         and <code>cd</code> to the directory where this code lives.
         In one console, start the demo:</p>
 
@@ -57,7 +61,7 @@ Listening on port 5570</pre>
 
         <p>Port 5570 is now bound to this process.<p>
 
-        <p>In the other console window, start the <code>demoSocket.py</code>
+        <p>In the other console window, start <code>demoSocket.py</code>
         in an attempt to bind to the same port:</p>
 
         <pre>
@@ -74,8 +78,8 @@ socket.error: [Errno 98] Address already in use</pre>
 
         <p>The second attempt to have another process listen to the
         same port fails. Only one process at a time may listen to a specific port.
-        Your traceback may be slightly different, the significant
-        portion that easily stops development is: "<i>Address already in use</i>.</p>
+        Your traceback may be slightly different. The significant
+        portion that easily stops development is: "<i>Address already in use</i>".</p>
 
         <h1><code>listeningPort.py</code> to sherlock who uses that port</h1>
 
@@ -93,13 +97,13 @@ Port 5570 : listening thru pid 28235 ./demoSocket.py 5570</pre>
         Your output will have different pids:</p>
         
         <pre>
-./listeningPort.py --short 5570
+./listeningPort.py --short 5570    # Only significant params
 5570 28235 ./demoSocket.py 5570
-$ ./listeningPort.py --pid 5570
+$ ./listeningPort.py --pid 5570    # Only the pid
 28235
-$ ./listeningPort.py --proc 5570
+$ ./listeningPort.py --proc 5570   # The command line of the process
 python ./demoSocket.py 5570
-$ ./listeningPort.py --kill 5570</pre>
+$ ./listeningPort.py --kill 5570   # Kill the process using that port</pre>
 
         <p>The command line switch of <code>--short</code> abbreviates
         the output for ease of parsing using additional utilities such
@@ -112,13 +116,14 @@ $ ./listeningPort.py --kill 5570</pre>
         of the process holding the port. This can be useful in
         further identifying the source of that port holder.
         While finding this command line from a pid is trivial,
-        encapsulating this in this utility provides yet another
-        easy access to this information.</p>
+        encapsulating this provides yet another
+        easy access to information.</p>
 
         <p>The <code>--kill</code> uses the port to identify the
-        pid and then attempts to kill that process. </p>
+        pid and then attempts to kill that process. Depending on
+        permissions, this may or may not succeed.</p>
 
-        <h1>The <code>--help</code> discussion</h1>
+        <</p>h1>The <code>--help</code> discussion</h1>
 
         <p>The <code>--help</code> flag outputs:</p>
 
@@ -141,13 +146,14 @@ e.g.:
                                         # listening to ports 5570 thru 5580.
 
 For the case of a free port, the output is similar to:
+  listeningPort 5571
   Port 5571 : Nobody listening
 
 --help = this message
 
 Only one of the following can be supplied:
 --short = Output consists of only three space separated fields:
-    &lt;port&gt; &gt;pid of listener&gt; &lt;process name of listener&gt;
+    &lt;port&gt; &lt;pid of listener&gt; &lt;process name of listener&gt;
     Ports with nobody listening gets ignored for output.
 --pid  = Output consists only of a pid
 --proc = Output consists only of process names
@@ -161,7 +167,7 @@ Only one of the following can be supplied:
 
 Return codes:
    255  == Invalid command line.
-    0   == Nobody listening to <port>
+    0   == Nobody listening to &lt;port&gt;
   &gt; 0   == The number of ports someone is listening to.
            For a series of port, this value is the number
            of ports with a listener.
@@ -191,7 +197,7 @@ Now use "ps" to find the process:
 seq -s ' ' 5570 5580
 5570 5571 5572 5573 5574 5575 5576 5577 5578 5579 5580</pre>
 
-    <p>The -s flag says use a space to separate each sequence number.
+    <p>The -s flag uses a space to separate each sequence number.
     <code>seq</code> has other useful flags. See the man page if interested.</p>
 
     <p>To illustrate multiple ports, in the console window running
@@ -245,7 +251,9 @@ Port 5580 : Nobody listening
 5579 29497 ./demoSocket.py 5579
     </pre>
 
-    <p>You have the idea. Now let's kill all those background processes.</p>
+    <p>You have the idea.</p> 
+    
+    <p>Now let's kill all those background processes.</p>
 
     <pre>
 ./listeningPort.py --kill $(seq 5570 5580)
@@ -259,8 +267,7 @@ Port 5580 : Nobody listening
     </pre>
 
     <p>The processes killed do not report anything, only the ports
-    with nobody listening gets reported. Perhaps this could be
-    improved?</p>
+    with nobody listening gets reported.</p>
 
     <p>In the console starting the <code>demoSocket.py</code>
     processes, press the return key:</p>
