@@ -4,6 +4,8 @@
 
         <p>This development process often encounters sockets left open after crashes, processes not properly closing or terminating, etc. The end result has processes running with unwanted sockets. When debugging resumes, developers encounter the "Address already in use" problem.</p>
 
+        <p>Source code is on <a href="https://github.com/TrailingDots/ListeningPort">github</a>.</p>
+
         <h1>listeningPort.py - Map port names to process pid</h1>
 
         <p><code>listeningPort.py</code> performs a mapping of a port number to a process id, i.e., a pid. Furthermore, the interface allows a range of ports as input. The output can take several hopefully useful forms.</p>
