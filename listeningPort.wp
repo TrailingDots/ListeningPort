@@ -42,6 +42,8 @@ socket.error: [Errno 98] Address already in use</pre>
 
         <h1>listeningPort.py to determine who uses that port</h1>
 
+        <p>Source code available at <a href="https://github.com/TrailingDots/ListeningPort">github</a>.</p>
+
         <p>In that same window that display that <i>Address already in use</i> error, determine the pid and command line of the port listener:</p>
 
         <pre>
