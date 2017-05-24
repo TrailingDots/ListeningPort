@@ -12,6 +12,33 @@
 
         <p>Additionally, since <code>listeningPort.py</code> maps ports to pids, it has the capability to kill a process using a specific port. This significantly facilitates socket development.</p>
 
+        <h1>Installation</h1>
+
+        <p>Some developers will need to install <code>psutils</code>:</p>
+
+        <pre>
+        pip install psutils</pre>
+
+
+        <p>Copy <code>listeningPort.py</code> to somewhere in your $PATH. A common place would be <code>$HOME/bin</code>.
+
+        <p>While copying, you might like to rename it to something like <code>listening</code></p>
+
+        <p>The logic of <code>import listeningPort</code> can be implemented. Assume that <code>listeningPort.py</code> has been copied to <code>$HOME/bin/listenng</code> .  Then create a symbolic link with a <code>.py</code> extension, add <code>$HOME/bin</code> to your path and import it:</p>
+
+        <pre>
+        cd $HOME/bin         # Or wherever you copied listeningPort.py
+        ln -s ./listening listening.py
+
+        cd <your-dev-dir>    # Test the "install", go to a dev dir
+        python               # Start python
+        import os, sys
+        HOME_BIN = os.getenv('HOME') + '/bin'
+        sys.path.append(HOME_BIN)
+        import listening # Assumes you symbolically linked to "listening.py"
+        .... </pre>
+
+
         <h1>A brief demo of the problem</h1>
 
         <p>The demo server, <code>demoSocket.py</code>, binds to a user selected port and does little else. Its behavior opens a port and keeps it open. <code>demoSocket.py</code> doesn't do much. It only listens to a socket. It serves its purpose by continuing to listen to a port. Its purpose is to illustrate the utility <code>listeningPort.py</code> and nothing else.</p>

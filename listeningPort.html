@@ -47,21 +47,21 @@
 
 
         <p>Copy <code>listeningPort.py</code> to somewhere in your
-        $PATH. A common place would be <code>$HOME/bin</code>.
+        $PATH. A common place would be <code>$HOME/bin/listening</code>.
 
         <p>While copying, you might like to rename it to
         something like <code>listening</code></p>
 
-        <p>The logic of <code>import listeningPort</code>
-        can be imported to you code. Assume that <code>listeningPort.py</code>
-        has been copied to <code>$HOME/bin</code> . 
+        <p>The logic of <code>import listening</code>
+        can be implemented. Assume that <code>listeningPort.py</code>
+        has been copied to <code>$HOME/bin/listening</code> . 
         Then create a symbolic link with a <code>.py</code>
-        extension, possibly add <code>$HOME/bin</code> to
+        extension, add <code>$HOME/bin</code> to
         your path and import it:</p>
 
         <pre>
         cd $HOME/bin         # Or wherever you copied listeningPort.py
-        ln -s ./listening listeningPort.py
+        ln -s ./listening listening.py
 
         cd <your-dev-dir>    # Test the "install", go to a dev dir
         python               # Start python
